@@ -62,16 +62,16 @@ const Register = () => {
   return (
     <div
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '90vh', backgroundColor: '#f8f9fa' }}
+      style={{ minHeight: '50vh', backgroundColor: '#f8f9fa' }}
     >
       <div className="w-25">
-        <h1 className='m-3' style={{ color: 'green', textAlign: 'center' }}>Welcome to<br/> Our Shop <br /> Create an Account!</h1>
+        <h1 className='m-3' style={{ color: 'black', textAlign: 'center' }}> Create an Account!</h1>
         <form>
-          <label style={{ color: 'green' }}>
+          <label style={{ color: 'black' }}>
             FullName
           </label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaUser />
             </span>
             <input
@@ -79,15 +79,15 @@ const Register = () => {
               className='form-control'
               type="text"
               placeholder='Enter your Full Name'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
-          <label style={{ color: 'green' }}>
+          <label style={{ color: 'black' }}>
              Location
           </label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaMapMarkerAlt />
             </span>
             <input
@@ -95,15 +95,15 @@ const Register = () => {
               className='form-control'
               type="text"
               placeholder='Enter your location'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
-          <label style={{ color: 'green' }}>
+          <label style={{ color: 'black' }}>
             PhoneNum
           </label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaPhone />
             </span>
             <input
@@ -111,15 +111,15 @@ const Register = () => {
               className='form-control'
               type="text"
               placeholder='Enter your phone num'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
-          <label style={{ color: 'green' }}>
+          <label style={{ color: 'black' }}>
             Email
           </label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaEnvelope />
             </span>
             <input
@@ -127,15 +127,14 @@ const Register = () => {
               className='form-control'
               type="email"
               placeholder='Enter your email'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
-          <label style={{ color: 'green' }}>
-             Password
-          </label>
+          <label style={{ color: 'balck' }}>
+             Password</label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaLock />
             </span>
             <input
@@ -143,7 +142,7 @@ const Register = () => {
               className='form-control'
               type="password"
               placeholder='Enter your password'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
@@ -152,9 +151,10 @@ const Register = () => {
             className='btn btn-success w-100'
             style={{ backgroundColor: 'green', color: 'white' }}
           >
-            Submit
+            Register
           </button>
-          <Link className='text-decoration-none text-black' to="/login">Already have an account?</Link>
+          <Link className='text-decoration-none text-black' to="/login">Already have an account? Log in</Link>
+          
         </form>
       </div>
     </div>

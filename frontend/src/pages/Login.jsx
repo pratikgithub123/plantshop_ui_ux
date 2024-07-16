@@ -49,7 +49,7 @@ const Login = () => {
     <div
       className="d-flex justify-content-center align-items-center"
       style={{
-        minHeight: '60vh',
+        minHeight: '70vh',
         
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -57,13 +57,13 @@ const Login = () => {
       }}
     >
       <div className="w-25">
-        <h1 className='mb-4' style={{ color: 'green', textAlign: 'center' }}>Sign in to your account!</h1>
+        <h1 className='mb-4' style={{ color: 'black', textAlign: 'center' }}>Please Log in !</h1>
         <form>
-          <label style={{ color: 'green' }}>
-             Email Address
+          <label style={{ color: 'black' }}>
+             Email 
           </label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaEnvelope />
             </span>
             <input
@@ -71,15 +71,15 @@ const Login = () => {
               className='form-control'
               type="email"
               placeholder='Enter your email'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
-          <label style={{ color: 'green' }}>
+          <label style={{ color: 'black' }}>
              Password
           </label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'green' }}>
+            <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaLock />
             </span>
             <input
@@ -87,7 +87,7 @@ const Login = () => {
               className='form-control'
               type="password"
               placeholder='Enter your password'
-              style={{ borderColor: 'green' }}
+              style={{ borderColor: 'black' }}
             />
           </div>
 
@@ -95,7 +95,7 @@ const Login = () => {
             onClick={handleSubmit}
             className='btn btn-outline-success w-100'
             type='submit'
-            style={{ backgroundColor: 'green', color: 'white' }}
+            style={{ backgroundColor: 'black', color: 'white' }}
           >
             Login
           </button>
