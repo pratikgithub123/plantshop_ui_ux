@@ -149,7 +149,7 @@ const Register = () => {
           <button
             onClick={handleSubmit}
             className='btn btn-success w-100'
-            style={{ backgroundColor: 'green', color: 'white' }}
+            style={{ backgroundColor: 'black', color: 'white' }}
           >
             Register
           </button>
