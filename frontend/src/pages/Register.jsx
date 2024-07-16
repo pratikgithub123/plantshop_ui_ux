@@ -3,6 +3,9 @@ import { FaEnvelope, FaLock, FaMapMarkerAlt, FaPhone, FaUser } from 'react-icons
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { registerApi } from '../apis/Api';
+import bottomLeftImage from '../assets/bottomleft.png';
+import topRightImage from '../assets/topright.png';
+import './components/Register.css';
 
 const Register = () => {
   const [fullname, setFullName] = useState('');
@@ -10,7 +13,7 @@ const Register = () => {
   const [phonenum, setPhoneNum] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const changeFullName = (e) => {
     setFullName(e.target.value);
@@ -47,8 +50,7 @@ const Register = () => {
       .then((res) => {
         if (res.data.success === true) {
           toast.success(res.data.message);
-          navigate("/login")
-
+          navigate("/login");
         } else {
           toast.error(res.data.message);
         }
@@ -60,16 +62,13 @@ const Register = () => {
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '50vh', backgroundColor: '#f8f9fa' }}
-    >
-      <div className="w-25">
-        <h1 className='m-3' style={{ color: 'black', textAlign: 'center' }}> Create an Account!</h1>
+    <div className="register-container">
+      <img src={topRightImage} alt="Top Right" className="top-right-image" />
+      <img src={bottomLeftImage} alt="Bottom Left" className="bottom-left-image" />
+      <div className="register-form-container">
+        <h1 className='m-3 register-title'> Create an Account!</h1>
         <form>
-          <label style={{ color: 'black' }}>
-            FullName
-          </label>
+          <label className="register-label">Full Name</label>
           <div className="input-group mb-2">
             <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaUser />
@@ -83,9 +82,7 @@ const Register = () => {
             />
           </div>
 
-          <label style={{ color: 'black' }}>
-             Location
-          </label>
+          <label className="register-label">Location</label>
           <div className="input-group mb-2">
             <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaMapMarkerAlt />
@@ -99,9 +96,7 @@ const Register = () => {
             />
           </div>
 
-          <label style={{ color: 'black' }}>
-            PhoneNum
-          </label>
+          <label className="register-label">Phone Number</label>
           <div className="input-group mb-2">
             <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaPhone />
@@ -110,14 +105,12 @@ const Register = () => {
               onChange={changePhoneNum}
               className='form-control'
               type="text"
-              placeholder='Enter your phone num'
+              placeholder='Enter your phone number'
               style={{ borderColor: 'black' }}
             />
           </div>
 
-          <label style={{ color: 'black' }}>
-            Email
-          </label>
+          <label className="register-label">Email</label>
           <div className="input-group mb-2">
             <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaEnvelope />
@@ -131,8 +124,7 @@ const Register = () => {
             />
           </div>
 
-          <label style={{ color: 'balck' }}>
-             Password</label>
+          <label className="register-label">Password</label>
           <div className="input-group mb-2">
             <span className="input-group-text" style={{ borderColor: 'black' }}>
               <FaLock />
@@ -148,13 +140,14 @@ const Register = () => {
 
           <button
             onClick={handleSubmit}
-            className='btn btn-success w-100'
+            className='btn btn-outline-success w-100 login-buttonyy'
             style={{ backgroundColor: 'black', color: 'white' }}
           >
             Register
           </button>
-          <Link className='text-decoration-none text-black' to="/login">Already have an account? Log in</Link>
-          
+          <Link className="login-register-link" to="/login">
+  Already have an account? Log in
+</Link>
         </form>
       </div>
     </div>

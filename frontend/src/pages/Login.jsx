@@ -3,8 +3,8 @@ import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { loginApi } from '../apis/Api';
-
-
+import { default as bottomLeftImage, default as topRightImage } from '../assets/topright.png';
+import './components/Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,72 +36,59 @@ const Login = () => {
 
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('user', JSON.stringify(res.data.userData));
-          navigate('/home')
+          navigate('/home');
         }
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Server Error!");
+        toast.error('Server Error!');
       });
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        minHeight: '70vh',
-        
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundColor: '#f8f9fa',
-      }}
-    >
-      <div className="w-25">
-        <h1 className='mb-4' style={{ color: 'black', textAlign: 'center' }}>Please Log in !</h1>
+    <div className="login-container">
+      <img src={topRightImage} alt="Top Right" className="top-right-image" />
+      <img src={bottomLeftImage} alt="Bottom Left" className="bottom-left-image" />
+      <div className="login-form-container">
+        <h1 className="login-title">Please Log in!</h1>
         <form>
-          <label style={{ color: 'black' }}>
-             Email 
-          </label>
+          <label className="login-label">Email</label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'black' }}>
+            <span className="input-group-text login-input-icon">
               <FaEnvelope />
             </span>
             <input
               onChange={changeEmail}
-              className='form-control'
+              className="form-control login-input"
               type="email"
-              placeholder='Enter your email'
-              style={{ borderColor: 'black' }}
+              placeholder="Enter your email"
             />
           </div>
 
-          <label style={{ color: 'black' }}>
-             Password
-          </label>
+          <label className="login-label">Password</label>
           <div className="input-group mb-2">
-            <span className="input-group-text" style={{ borderColor: 'black' }}>
+            <span className="input-group-text login-input-icon">
               <FaLock />
             </span>
             <input
               onChange={changePassword}
-              className='form-control'
+              className="form-control login-input"
               type="password"
-              placeholder='Enter your password'
-              style={{ borderColor: 'black' }}
+              placeholder="Enter your password"
             />
           </div>
 
           <button
             onClick={handleSubmit}
-            className='btn btn-outline-success w-100'
-            type='submit'
-            style={{ backgroundColor: 'black', color: 'white' }}
+            className="btn btn-outline-success w-100 login-button"
+            type="submit"
           >
             Login
           </button>
-          <Link className='text-decoration-none text-black' to="/register">Create a new account?</Link><br />
-          
-          
+          <Link className="login-register-link" to="/register">
+            Create a new account?
+          </Link>
+          <br />
         </form>
       </div>
     </div>
