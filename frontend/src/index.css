@@ -1,0 +1,31 @@
+/* 
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.container{
+  width:1000vw;
+  min-height:100vh;
+  background: #ced8ff;
+
+}
+.btn btn-primary{
+
+  background-color: black;
+  color: #fff;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn btn-primary{
+  background-color: red;
+
+}
+
+.text-decoration-none text-black{
+  color: black;
+} */
