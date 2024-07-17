@@ -1,65 +1,95 @@
 const Cart = require('../model/cartModel');
+const Product = require("../model/productModel")
+const User = require("../model/userModel")
 
-exports.getCart = async (req, res) => {
-    try {
-        const cart = await Cart.findOne({ user: req.user._id }).populate('items.product');
-        if (!cart) {
-            return res.status(404).json({ success: false, message: "No cart found for this user." });
-        }
-        res.json({ success: true, cart });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+const addToCart = async (req, res) => {
+    const { userId, productId, quantity } = req.body;
+    if (!userId || !productId || !quantity) {
+        return res.status(400).json({
+            success: false,
+            message: "UserId, Product, and quantity are required"
+        })
     }
-};
-
-exports.addToCart = async (req, res) => {
-    const { productId, quantity } = req.body;
-    const userId = req.user._id; 
-
     try {
+        const product = await Product.findById(productId)
+        if (!product) {
+            return res.status(400).json({
+                success: false,
+                message: "Product not found"
+            })
+        }
+        
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "User does not exist"
+            })
+        }
+
         let cart = await Cart.findOne({ user: userId });
+
         if (!cart) {
-            
             cart = new Cart({
                 user: userId,
-                items: [{ product: productId, quantity }],
+                items: [{ product: productId, quantity }]
             });
         } else {
-            // If cart exists, add or update the item
+            // Check if item already exists in cart and update quantity if so
             const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
             if (itemIndex > -1) {
-                
                 cart.items[itemIndex].quantity += quantity;
             } else {
-               
                 cart.items.push({ product: productId, quantity });
             }
         }
 
         await cart.save();
-        res.status(200).json({ success: true, cart });
+
+        res.status(200).json({
+            success: true,
+            message: "Item added to cart successfully",
+            cart: cart
+        });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.log(`Error in add to cart is ${error}`)
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        })
     }
-};
+}
 
+const getCart = async(req, res) => {
+    const userId = req.params.userId;
 
-exports.removeFromCart = async (req, res) => {
     try {
-        const userId = req.user._id; 
-        const { itemId } = req.body; 
+        const cart = await Cart.findOne({ user: userId }).populate('items.product');
 
-        const cart = await Cart.findOne({ user: userId });
         if (!cart) {
-            return res.status(404).json({ success: false, message: "Cart not found" });
+            return res.status(404).json({
+                success: false,
+                message: "Cart not found"
+            });
         }
 
-        // Remove the item from the cart
-        cart.items = cart.items.filter(item => item._id.toString() !== itemId);
-        await cart.save();
+        res.status(200).json({
+            success: true,
+            message: "Cart fetched successfully",
+            cart: cart
+        });
 
-        res.json({ success: true, message: "Item removed from cart" });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error("Error in fetching cart:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error
+        });
     }
-};
+}
+
+module.exports = {
+    addToCart, getCart
+}
