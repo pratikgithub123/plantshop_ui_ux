@@ -1,6 +1,4 @@
-
 const mongoose = require('mongoose');
-
 
 const userSchema = mongoose.Schema({
     fullname: {
@@ -27,12 +25,11 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    cart: {
+    cart: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Cart'
-    }
-    
+        ref: 'Cart' 
+    }]
 });
 
-const Users = mongoose.model('users', userSchema);
-module.exports = Users;
+const User = mongoose.model('User', userSchema);
+module.exports = User;
