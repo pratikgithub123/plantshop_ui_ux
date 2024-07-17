@@ -8,7 +8,7 @@ import logo from '../assets/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
 
   const handleLogout = () => {

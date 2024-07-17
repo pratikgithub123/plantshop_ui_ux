@@ -58,6 +58,8 @@ export const getAllUsersApi = () => Api.get('/api/user/get_users', config)
 // Delete User API
 export const deleteUserApi = (id) => Api.delete(`/api/user/delete_user/${id}`, config);
 
+//add to cart
+export const addtoCartApi = (formData) => Api.post(`/api/cart/add`, config)
 
 
 // Get All Carts API
