@@ -4,25 +4,19 @@ import {
   BrowserRouter as Router,
   Routes
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import Footer from './component/Footer';
 import Navbar from './component/Navbar';
+import { CartProvider } from './pages/CartContext';
 import CartPage from './pages/CartPage';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import ProductDetails from './pages/ProductsDetails';
 import ProductsPage from './pages/ProductsPage';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
-
-
-
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Login from './pages/Login';
-
-
-
-import { CartProvider } from './pages/CartContext';
-import ProductDetails from './pages/ProductsDetails';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboardUserDetails from './pages/admin/AdminDasboardUserDetails';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -43,10 +37,11 @@ function App() {
       <div className='main'>
 
       <Routes>
+      <Route path='/' element={<Home />} />
       <Route path="/products" element={<ProductsPage searchQuery={searchQuery} />} />
       <Route path="/product/:id" element={<ProductDetails />} />
         
-        <Route path='/home' element={<Home />} />
+       
         <Route path='/products' element={<ProductsPage />} />
        {/* <Route path="/cart" component={CartPage} /> */}
        <Route path="/cart/:id" element={<CartPage/>} />

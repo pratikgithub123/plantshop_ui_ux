@@ -24,7 +24,12 @@ const Register = () => {
   };
 
   const changePhoneNum = (e) => {
-    setPhoneNum(e.target.value);
+    const input = e.target.value;
+    // Replace any non-digit characters with an empty string
+    const formattedInput = input.replace(/\D/g, '');
+    // Limit to 10 digits
+    const limitedInput = formattedInput.slice(0, 10);
+    setPhoneNum(limitedInput);
   };
 
   const changeEmail = (e) => {
@@ -38,6 +43,24 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Simple form validation
+    if (!fullname || !location || !phonenum || !email || !password) {
+      toast.error('Please fill in all fields.');
+      return;
+    }
+
+    // Check if email contains "@gmail.com"
+    if (!email.includes('@gmail.com')) {
+      toast.error('Please enter a valid Gmail address.');
+      return;
+    }
+
+    // Check if phone number is exactly 10 digits
+    if (phonenum.length !== 10) {
+      toast.error('Phone number should be exactly 10 digits.');
+      return;
+    }
+
     const data = {
       fullname: fullname,
       location: location,
@@ -50,7 +73,7 @@ const Register = () => {
       .then((res) => {
         if (res.data.success === true) {
           toast.success(res.data.message);
-          navigate("/login");
+          navigate('/login');
         } else {
           toast.error(res.data.message);
         }
@@ -75,6 +98,7 @@ const Register = () => {
             </span>
             <input
               onChange={changeFullName}
+              value={fullname}
               className='form-control'
               type="text"
               placeholder='Enter your Full Name'
@@ -89,6 +113,7 @@ const Register = () => {
             </span>
             <input
               onChange={changeLocation}
+              value={location}
               className='form-control'
               type="text"
               placeholder='Enter your location'
@@ -103,6 +128,7 @@ const Register = () => {
             </span>
             <input
               onChange={changePhoneNum}
+              value={phonenum}
               className='form-control'
               type="text"
               placeholder='Enter your phone number'
@@ -117,6 +143,7 @@ const Register = () => {
             </span>
             <input
               onChange={changeEmail}
+              value={email}
               className='form-control'
               type="email"
               placeholder='Enter your email'
@@ -131,6 +158,7 @@ const Register = () => {
             </span>
             <input
               onChange={changePassword}
+              value={password}
               className='form-control'
               type="password"
               placeholder='Enter your password'
@@ -146,8 +174,8 @@ const Register = () => {
             Register
           </button>
           <Link className="login-register-link" to="/login">
-  Already have an account? Log in
-</Link>
+            Already have an account? Log in
+          </Link>
         </form>
       </div>
     </div>

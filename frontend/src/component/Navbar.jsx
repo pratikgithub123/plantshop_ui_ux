@@ -17,12 +17,12 @@ const Navbar = () => {
 
   return (
     <div className='navbar'>
-      <Link to="/home">
+      <Link to="/">
         <img src={logo} alt="logo" className='logo' />
       </Link>
       <ul>
         <li>
-          <Link to="/home">Home</Link>
+          <Link to="/">Home</Link>
         </li>
         <li>
           <Link to="/products">Products</Link>
@@ -41,15 +41,16 @@ const Navbar = () => {
                 </div>
               </li>
             )}
-            <li onClick={handleLogout}>
-              <FontAwesomeIcon icon={faSignOutAlt} />
-            </li>
+            
             <li>
               {user.isAdmin ? (
                 <span>Welcome Admin, {user.fullname}</span>
               ) : (
                 <span>Welcome, {user.fullname}</span>
               )}
+            </li>
+            <li onClick={handleLogout}>
+              <FontAwesomeIcon icon={faSignOutAlt} />
             </li>
           </>
         ) : (
@@ -71,6 +72,7 @@ const Navbar = () => {
         <Link to="/login">
           <img src={cart} alt="cart" className='cart' />
         </Link>
+        
       )}
     </div>
   );

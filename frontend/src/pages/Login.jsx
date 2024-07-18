@@ -37,7 +37,7 @@ const Login = () => {
 
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('user', JSON.stringify(res.data.userData));
-          navigate('/home');
+          navigate('/');
         }
       })
       .catch((err) => {
