@@ -11,9 +11,9 @@ const Api = axios.create({
 
 const config = {
     headers: {
-      'authorization': `Bearer ${localStorage.getItem('token')}`
+        'authorization': `Bearer ${localStorage.getItem('token')}`
     }
-  };
+};
 
 // configuration for axios
 console.log(`Auth Header: ${localStorage.getItem('token')}`);
@@ -58,15 +58,42 @@ export const getAllUsersApi = () => Api.get('/api/user/get_users', config)
 // Delete User API
 export const deleteUserApi = (id) => Api.delete(`/api/user/delete_user/${id}`, config);
 
-//add to cart
-export const addtoCartApi = (formData) => Api.post(`/api/cart/add`, config)
 
 
 // Get All Carts API
-export const getAllCartsApi = () => Api.get('/api/cart/get', config);
+export const getAllCartsApi = (id) => {
+    const config = {
+        headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    };
+    return Api.get(`/api/cart/getcart/${id}`, config);
+};
+
+
+export const addtoCartsApi = (formData) => {
+    const config = {
+        headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json'
+        }
+    };
+    console.log("Payload:", formData);
+    console.log("Config:", config);
+    return Api.post(`/api/cart/add`, formData, config);
+};
+
 
 // Delete Cart API
-export const deleteCartApi = (cartId) => Api.delete(`/api/cart/remove/${cartId}`, config);
+export const deleteCartApi = (formData) => {
+    const config = {
+        headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json'
+        }
+    };
+    return Api.delete(`/api/cart/delete`, { data: formData, ...config });
+};
 
 
 

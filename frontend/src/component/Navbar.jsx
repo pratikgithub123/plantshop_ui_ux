@@ -8,7 +8,7 @@ import logo from '../assets/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("userData"));
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -52,6 +52,7 @@ const Navbar = () => {
                 <span>Welcome, {user.fullname}</span>
               )}
             </li>
+          
           </>
         ) : (
           <>
@@ -64,7 +65,7 @@ const Navbar = () => {
           </>
         )}
       </ul>
-      <Link to="/cart">
+      <Link to={`/cart/${user._id}`}>
         <img src={cart} alt="cart" className='cart' />
         
       </Link>

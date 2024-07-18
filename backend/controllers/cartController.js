@@ -35,7 +35,6 @@ const addToCart = async (req, res) => {
                 items: [{ product: productId, quantity }]
             });
         } else {
-            // Check if item already exists in cart and update quantity if so
             const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
             if (itemIndex > -1) {
                 cart.items[itemIndex].quantity += quantity;
@@ -90,6 +89,53 @@ const getCart = async(req, res) => {
     }
 }
 
+const deleteCartItem = async (req, res) => {
+    const { userId, productId } = req.body;
+
+    if (!userId || !productId) {
+        return res.status(400).json({
+            success: false,
+            message: "UserId and ProductId are required"
+        });
+    }
+
+    try {
+        const cart = await Cart.findOne({ user: userId });
+
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart not found"
+            });
+        }
+
+        const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+        if (itemIndex > -1) {
+            cart.items.splice(itemIndex, 1); 
+            await cart.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Item removed from cart successfully",
+                cart: cart
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: "Item not found in cart"
+            });
+        }
+
+    } catch (error) {
+        console.error("Error in deleting cart item:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error
+        });
+    }
+}
+
 module.exports = {
-    addToCart, getCart
+    addToCart, getCart, deleteCartItem
 }
