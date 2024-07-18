@@ -9,6 +9,7 @@ router.post('/login' ,userController.loginUser)
 
 router.get('/get_users',  userController.getUsers); 
 
+
 router.delete('/delete_user/:id',  userController.deleteUser);
 
 

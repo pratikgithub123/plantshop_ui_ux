@@ -45,7 +45,7 @@ const createUser = async (req, res) => {
     await newUser.save();
     res.status(200).json({
       success: true,
-      message: "User created successfully.",
+      message: "Account Created Successfully.",
     });
   } catch (error) {
     console.log(error);
@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        message: "User does not exist.",
+        message: "Account does not exist.",
       });
     }
 
@@ -80,7 +80,7 @@ const loginUser = async (req, res) => {
     if (!isMatched) {
       return res.json({
         success: false,
-        message: "Invalid Credentials.",
+        message: "Password Wrong.",
       });
     }
 
@@ -88,7 +88,7 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "User logged in successfully.",
+      message: "You logged In Successfully.",
       token: token,
       userData: user,
     });
@@ -111,7 +111,7 @@ const resetPassword = async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        message: "User does not exist.",
+        message: "Accont does not exist.",
       });
     }
 
