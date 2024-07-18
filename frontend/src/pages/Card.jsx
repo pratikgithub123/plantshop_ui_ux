@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { addtoCartsApi } from '../apis/Api'; 
 import { toast } from 'react-toastify';
+import { addtoCartsApi } from '../apis/Api';
 
 const Card = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
@@ -43,7 +43,10 @@ const Card = ({ product }) => {
         </Link>
         <div className="product-info">
           <h3>{product.productName}</h3>
-          <p className="product-price">Price: Rs {product.productPrice} per KG</p>
+          <label>
+            Catergory: <h7>{product.productCategory}</h7>
+          </label>
+          <p className="product-price">Price: NPR {product.productPrice}</p>
           <div>
             <label>Quantity:</label>
             <input
@@ -52,7 +55,7 @@ const Card = ({ product }) => {
               min={1}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
             />
-            <label>KG</label>
+            <label>Piece</label>
           </div>
           <p>Total Price: Rs {totalPrice}</p>
           <button onClick={handleAddToCart} className="add-to-cart-btn">

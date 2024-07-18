@@ -5,18 +5,18 @@ const CartContext = createContext();
 const cartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_TO_CART':
-      // Implement logic to add item to cart
+      
       const updatedCart = [...state, action.payload];
       return updatedCart;
 
     case 'REMOVE_FROM_CART':
-      // Implement logic to remove item from cart
+     
       const productIdToRemove = action.payload;
       const filteredCart = state.filter(item => item.productId !== productIdToRemove);
       return filteredCart;
 
     case 'GET_CART':
-      // Implement logic to fetch cart
+      
       return state;
 
     default:

@@ -1,4 +1,3 @@
-// Navbar.js
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
@@ -36,7 +35,7 @@ const Navbar = () => {
             </li>
             {user.isAdmin && (
               <li className="dropdown">
-                <span className="dropbtn"></span>
+                
                 <div className="dropdown-content">
                   <Link to="/admin/dashboard">Admin Dashboard</Link>
                 </div>
@@ -52,7 +51,6 @@ const Navbar = () => {
                 <span>Welcome, {user.fullname}</span>
               )}
             </li>
-          
           </>
         ) : (
           <>
@@ -65,10 +63,15 @@ const Navbar = () => {
           </>
         )}
       </ul>
-      <Link to={`/cart/${user._id}`}>
-        <img src={cart} alt="cart" className='cart' />
-        
-      </Link>
+      {user ? (
+        <Link to={`/cart/${user._id}`}>
+          <img src={cart} alt="cart" className='cart' />
+        </Link>
+      ) : (
+        <Link to="/login">
+          <img src={cart} alt="cart" className='cart' />
+        </Link>
+      )}
     </div>
   );
 };

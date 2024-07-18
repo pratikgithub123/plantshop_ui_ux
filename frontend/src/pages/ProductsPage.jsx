@@ -116,7 +116,7 @@ const Product = ({ searchQuery }) => {
       <h1 className="product-heading">Discover the fresh Plants!</h1>
 
       <div className="search-container">
-        <label>Search by Name:</label>
+        <label>Search Product:</label>
         <input
           type="text"
           value={searchInput}

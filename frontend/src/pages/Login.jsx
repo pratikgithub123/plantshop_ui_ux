@@ -3,7 +3,8 @@ import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { loginApi } from '../apis/Api';
-import { default as bottomLeftImage, default as topRightImage } from '../assets/topright.png';
+import bottomLeftImage from '../assets/bottomleft.png';
+import topRightImage from '../assets/topright.png';
 import './components/Login.css';
 
 const Login = () => {
@@ -50,7 +51,7 @@ const Login = () => {
       <img src={topRightImage} alt="Top Right" className="top-right-image" />
       <img src={bottomLeftImage} alt="Bottom Left" className="bottom-left-image" />
       <div className="login-form-container">
-        <h1 className="login-title">Please Log in!</h1>
+        <h1 className="login-title">Please Log in First!</h1>
         <form>
           <label className="login-label">Email</label>
           <div className="input-group mb-2">

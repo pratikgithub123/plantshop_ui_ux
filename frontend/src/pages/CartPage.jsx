@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAllCartsApi, deleteCartApi } from '../apis/Api'; 
 import { toast } from 'react-toastify';
+import { deleteCartApi, getAllCartsApi } from '../apis/Api';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -37,9 +37,8 @@ const CartPage = () => {
       const response = await deleteCartApi(formData);
       console.log('Delete API Response:', response);
       if (response.data.success) {
-        
         setCartItems(cartItems.filter(item => item.product._id !== productId));
-        toast.success("Item Deleted")
+        toast.success("Item Deleted");
       } else {
         console.error('Error deleting cart item:', response.data.message);
       }
@@ -54,26 +53,40 @@ const CartPage = () => {
     }
   };
 
-
   return (
-    <div className="container mx-auto p-4">
+    <div className="m-5">
       <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
       {loading ? (
         <p>Loading...</p>
       ) : cartItems.length > 0 ? (
-        <ul className="divide-y divide-gray-200">
-          {cartItems.map((item) => (
-            <li key={item._id} className="py-4 flex">
-              <img src={item.product.productImageUrl} alt={item.product.productName} className="product-image" />
-              <div className="ml-4">
-                <p className="text-lg font-semibold">{item.product.productName}</p>
-                <p className="text-gray-500">Price: ${item.product.productPrice.toFixed(2)}</p>
-                <p className="text-gray-500">Quantity: {item.quantity}</p>
-                <button onClick={() => confirmAndDelete(item.product._id)}>Remove</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <table className="table">
+          <thead className="table-dark">
+            <tr>
+              <th>Product Image</th>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => (
+              <tr key={item._id}>
+                <td>
+                  <img src={item.product.productImageUrl} alt={item.product.productName} className="product-image" style={{ width: '100px', height: 'auto' }} />
+                </td>
+                <td>{item.product.productName}</td>
+                <td>${item.product.productPrice.toFixed(2)}</td>
+                <td>{item.quantity}</td>
+                <td>
+                  <button onClick={() => confirmAndDelete(item.product._id)} type="button" className="btn btn-danger">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <p>No items in the cart.</p>
       )}
