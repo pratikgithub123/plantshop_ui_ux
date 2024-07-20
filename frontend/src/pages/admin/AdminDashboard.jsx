@@ -6,20 +6,20 @@ import { toast } from 'react-toastify';
 import { createProductApi, deleteProductApi, getAllProductsApi } from '../../apis/Api';
 
 const AdminDashboard = () => {
-     const navigate = useNavigate()
+    const navigate = useNavigate()
 
-   
+
     const [productName, setProductName] = useState('')
     const [productPrice, setProductPrice] = useState('')
     const [productDescription, setProductDescription] = useState('')
-    const [productCategory, setProductCategory] = useState('')
-    const [productFeatured, setProductFeatured] = useState('');
+    const [productCategory, setProductCategory] = useState('Indoor')
+    const [productFeatured, setProductFeatured] = useState(true);
 
-    
+
     const [productImage, setProductImage] = useState(null)
     const [previewImage, setPreviewImage] = useState(null)
 
- 
+
     const handleImageUpload = (event) => {
         const file = event.target.files[0]
         console.log(file)
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
         setPreviewImage(URL.createObjectURL(file))
     }
 
-    
+
     const [products, setProducts] = useState([])
     useEffect(() => {
         getAllProductsApi().then((res) => {
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
         })
     }, [])
 
-   
+
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData()
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
         formData.append('productImage', productImage)
         formData.append('productFeatured', productFeatured);
 
-        
+
         createProductApi(formData).then((res) => {
             if (res.data.success == false) {
                 toast.error(res.data.message)
@@ -62,18 +62,18 @@ const AdminDashboard = () => {
     }
 
 
-    
+
     const handleDelete = (id) => {
 
-        
+
         const confirm = window.confirm("Are you sure you want to delete this product?")
-        if(!confirm){
+        if (!confirm) {
             return
         } else {
             deleteProductApi(id).then((res) => {
-                if(res.data.success == false){
+                if (res.data.success == false) {
                     toast.error(res.data.message)
-                } else{
+                } else {
                     toast.success(res.data.message)
                     window.location.reload()
                 }
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
             <div className='m-4'>
                 <div className='d-flex justify-content-between'>
                     <h1>Product Details</h1>
-                    
+
 
                     <button type="button" className="btn btn-danger " data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Add Product
@@ -104,17 +104,17 @@ const AdminDashboard = () => {
                     <Link to="/admin/dashboardusercart" className="userdetails">
                         Cart Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
                     </Link>
-                    
+
                     <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        
+
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header">
                                     <h1 className="modal-title fs-5" id="exampleModalLabel">Create a new product!</h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    
+
                                 </div>
-                                
+
                                 <div className="modal-body">
 
                                     <label>Product Name</label>
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
                                     <select onChange={(e) => setProductCategory(e.target.value)} className='form-control mb-2'>
                                         <option value="Indoor">Indoor</option>
                                         <option value="Outdoor">Outdoor</option>
-                                      
+
                                     </select>
 
                                     <label>Product Image</label>
@@ -142,13 +142,18 @@ const AdminDashboard = () => {
                                         previewImage && <img src={previewImage} className='img-fluid rounded object-cover mt-2' />
                                     }
                                     <label htmlFor="">Feature</label>
-                                    <select
-  onChange={(e) => setProductFeatured(e.target.value === 'true')}
-  className='form-control mb-2'
->
-  <option value="true">true</option>
-  <option value="false">false</option>
-</select>
+                                    {/* <select
+                                        onChange={(e) => setProductFeatured(e.target.value == 'true')}
+                                        className='form-control mb-2'
+                                    >
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
+                                    </select> */}
+                                    <select onChange={(e) => setProductFeatured(e.target.value === 'true')} className='form-control mb-2'>
+                                        <option value="true">true</option>
+                                        <option value="false">false</option>
+                                    </select>
+
 
 
                                 </div>
@@ -184,10 +189,10 @@ const AdminDashboard = () => {
                                     <td>{item.productName}</td>
                                     <td>Rs.{item.productPrice}</td>
                                     <td>{item.productCategory}</td>
-                                    <td>{item.productDescription.slice(0,10)}....</td>
+                                    <td>{item.productDescription.slice(0, 10)}....</td>
                                     <td>{item.productFeatured ? 'true' : 'false'}</td>
 
-                                    
+
                                     <td>
                                         <div className="btn-group" role="group" aria-label="Basic example">
                                             <Link to={`/admin/edit/${item._id}`} type="button" className="btn btn-success">Edit</Link>
@@ -201,7 +206,7 @@ const AdminDashboard = () => {
                 </table>
 
             </div>
-            
+
 
         </>
     )

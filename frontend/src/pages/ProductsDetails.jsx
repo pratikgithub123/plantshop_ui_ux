@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './components/ProductDetails.css';
+import { toast } from 'react-toastify';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -46,6 +47,7 @@ const ProductDetails = () => {
       axios.post('http://localhost:5000/api/cart/add', cartItem)
         .then(response => {
           if (response.data.success) {
+            toast.success("Item Added Successfully")
             console.log(`Added ${product.productName} to the cart with quantity ${quantity}`);
           } else {
             console.error('Error adding to cart:', response.data.message);

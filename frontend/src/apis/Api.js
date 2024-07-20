@@ -4,21 +4,20 @@ const Api = axios.create({
     baseURL: "http://localhost:5000",
     withCredentials: true,
     headers: {
-        "Content-Type": "multipart/form-data"
+        "Content-Type": "application/json"
     }
-})
+});
 
-
-const config = {
+const getConfig = () => ({
     headers: {
         'authorization': `Bearer ${localStorage.getItem('token')}`
     }
-};
+});
 
-// configuration for axios
+// Log the auth header for debugging purposes
 console.log(`Auth Header: ${localStorage.getItem('token')}`);
 
-export const addToCartApi = (data) => Api.post('/api/cart/add', data, config);
+export const addToCartApi = (data) => Api.post('/api/cart/add', data, getConfig());
 
 // Register API
 export const registerApi = (data) => Api.post("/api/user/create", data);
@@ -45,7 +44,7 @@ export const updateProductApi = (id, formData) => Api.put(`/api/product/update_p
 export const deleteProductApi = (id) => Api.delete(`/api/product/delete_product/${id}`);
 
 // Get All Users API
-export const getAllUsersApi = () => Api.get('/api/user/get_users', config)
+export const getAllUsersApi = () => Api.get('/api/user/get_users', getConfig())
     .then((res) => {
         console.log('Get All Users Response:', res);
         return res;
@@ -56,45 +55,21 @@ export const getAllUsersApi = () => Api.get('/api/user/get_users', config)
     });
 
 // Delete User API
-export const deleteUserApi = (id) => Api.delete(`/api/user/delete_user/${id}`, config);
-
-
+export const deleteUserApi = (id) => Api.delete(`/api/user/delete_user/${id}`, getConfig());
 
 // Get All Carts API
-export const getAllCartsApi = (id) => {
-    const config = {
-        headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-    };
-    return Api.get(`/api/cart/getcart/${id}`, config);
-};
+export const getAllCartsApi = (id) => Api.get(`/api/cart/getcart/${id}`, getConfig());
 
-
+// Add to Carts API
 export const addtoCartsApi = (formData) => {
-    const config = {
-        headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-            'Content-Type': 'application/json'
-        }
-    };
     console.log("Payload:", formData);
-    console.log("Config:", config);
-    return Api.post(`/api/cart/add`, formData, config);
+    console.log("Config:", getConfig());
+    return Api.post(`/api/cart/add`, formData, getConfig());
 };
-
 
 // Delete Cart API
-export const deleteCartApi = (formData) => {
-    const config = {
-        headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-            'Content-Type': 'application/json'
-        }
-    };
-    return Api.delete(`/api/cart/delete`, { data: formData, ...config });
-};
+export const deleteCartApi = (formData) => Api.delete(`/api/cart/delete`, { data: formData, ...getConfig() });
 
-
-
+// Clear Cart API
+export const clearCartApi = (userId) => Api.post('/api/cart/clear', { userId }, getConfig());
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { deleteCartApi, getAllCartsApi } from '../apis/Api';
+import { clearCartApi, deleteCartApi, getAllCartsApi } from '../apis/Api'; // Import clearCartApi
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -38,7 +38,7 @@ const CartPage = () => {
       console.log('Delete API Response:', response);
       if (response.data.success) {
         setCartItems(cartItems.filter(item => item.product._id !== productId));
-        toast.success("Item Deleted");
+        toast.success("Item Deleted From Cart");
       } else {
         console.error('Error deleting cart item:', response.data.message);
       }
@@ -53,6 +53,24 @@ const CartPage = () => {
     }
   };
 
+  // New function to handle clearing the cart
+  const handleClearCartApi = async () => {
+    if (window.confirm("Are you sure you want to clear the entire cart?")) {
+      try {
+        const response = await clearCartApi(id);
+        console.log('Clear Cart API Response:', response);
+        if (response.data.success) {
+          setCartItems([]);
+          toast.success("All items removed from cart");
+        } else {
+          console.error('Error clearing cart:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error clearing cart:', error);
+      }
+    }
+  };
+
   // Calculate total price
   const totalPrice = cartItems.reduce((total, item) => {
     return total + (item.product.productPrice * item.quantity);
@@ -60,7 +78,10 @@ const CartPage = () => {
 
   return (
     <div className="m-5">
-      <h1 className="text-3xl font-bold mb-4">Your Cart</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="text-3xl font-bold">Your Cart</h1>
+        <button onClick={handleClearCartApi} className="btn btn-danger">Clear Cart</button>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : cartItems.length > 0 ? (
@@ -82,7 +103,7 @@ const CartPage = () => {
                     <img src={item.product.productImageUrl} alt={item.product.productName} className="product-image" style={{ width: '100px', height: 'auto' }} />
                   </td>
                   <td>{item.product.productName}</td>
-                  <td>${item.product.productPrice.toFixed(2)}</td>
+                  <td>NPR {item.product.productPrice.toFixed(2)}</td>
                   <td>{item.quantity}</td>
                   <td>
                     <button onClick={() => confirmAndDelete(item.product._id)} type="button" className="btn btn-danger">
@@ -94,7 +115,7 @@ const CartPage = () => {
               <tr>
                 <td colSpan="3"></td>
                 <td className="font-bold">Total:</td>
-                <td className="font-bold">${totalPrice}</td>
+                <td className="font-bold">NPR : {totalPrice}</td>
               </tr>
             </tbody>
           </table>

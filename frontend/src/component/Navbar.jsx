@@ -64,15 +64,16 @@ const Navbar = () => {
           </>
         )}
       </ul>
-      {user ? (
+      {user && !user.isAdmin ? (
         <Link to={`/cart/${user._id}`}>
           <img src={cart} alt="cart" className='cart' />
         </Link>
       ) : (
-        <Link to="/login">
-          <img src={cart} alt="cart" className='cart' />
-        </Link>
-        
+        user ? null : (
+          <Link to="/login">
+            <img src={cart} alt="cart" className='cart' />
+          </Link>
+        )
       )}
     </div>
   );
