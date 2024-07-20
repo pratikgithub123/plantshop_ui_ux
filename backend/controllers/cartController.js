@@ -136,7 +136,6 @@ const deleteCartItem = async (req, res) => {
     }
 }
 
-// New clearCart function
 const clearCart = async (req, res) => {
     const { userId } = req.body;
 
@@ -176,6 +175,54 @@ const clearCart = async (req, res) => {
     }
 }
 
+// Add the updateCartItem function
+const updateCartItem = async (req, res) => {
+    const { userId, productId, quantity } = req.body;
+
+    if (!userId || !productId || !quantity) {
+        return res.status(400).json({
+            success: false,
+            message: "UserId, ProductId, and quantity are required"
+        });
+    }
+
+    try {
+        const cart = await Cart.findOne({ user: userId });
+
+        if (!cart) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart not found"
+            });
+        }
+
+        const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+        if (itemIndex > -1) {
+            cart.items[itemIndex].quantity = quantity;
+            await cart.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Cart item updated successfully",
+                cart: cart
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: "Item not found in cart"
+            });
+        }
+
+    } catch (error) {
+        console.error("Error in updating cart item:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error
+        });
+    }
+}
+
 module.exports = {
-    addToCart, getCart, deleteCartItem, clearCart
+    addToCart, getCart, deleteCartItem, clearCart, updateCartItem
 }
