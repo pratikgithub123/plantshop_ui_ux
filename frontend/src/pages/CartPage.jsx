@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { clearCartApi, deleteCartApi, getAllCartsApi } from '../apis/Api'; // Import clearCartApi
+import { clearCartApi, deleteCartApi, getAllCartsApi, updateCartApi } from '../apis/Api'; // Import updateCartApi
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false); // For update state
   const { id } = useParams();
 
   useEffect(() => {
@@ -71,7 +72,35 @@ const CartPage = () => {
     }
   };
 
-  // Calculate total price
+  // New function to handle updating cart items
+  const handleUpdateQuantity = async (productId, newQuantity) => {
+    setUpdating(true);
+    try {
+      const formData = {
+        userId: id,
+        productId: productId,
+        quantity: newQuantity
+      };
+      const response = await updateCartApi(formData);
+      console.log('Update Cart API Response:', response);
+      if (response.data.success) {
+        setCartItems(cartItems.map(item =>
+          item.product._id === productId
+            ? { ...item, quantity: newQuantity }
+            : item
+        ));
+        toast.success("Cart updated successfully");
+      } else {
+        console.error('Error updating cart:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error updating cart:', error);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  // Calculate total price for each item and overall total
   const totalPrice = cartItems.reduce((total, item) => {
     return total + (item.product.productPrice * item.quantity);
   }, 0).toFixed(2);
@@ -93,28 +122,42 @@ const CartPage = () => {
                 <th>Product Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
+                <th>Item Total</th> {/* New column for item total */}
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item) => (
-                <tr key={item._id}>
-                  <td>
-                    <img src={item.product.productImageUrl} alt={item.product.productName} className="product-image" style={{ width: '100px', height: 'auto' }} />
-                  </td>
-                  <td>{item.product.productName}</td>
-                  <td>NPR {item.product.productPrice.toFixed(2)}</td>
-                  <td>{item.quantity}</td>
-                  <td>
-                    <button onClick={() => confirmAndDelete(item.product._id)} type="button" className="btn btn-danger">
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {cartItems.map((item) => {
+                const itemTotal = (item.product.productPrice * item.quantity).toFixed(2); // Calculate item total
+                return (
+                  <tr key={item.product._id}>
+                    <td>
+                      <img src={item.product.productImageUrl} alt={item.product.productName} className="product-image" style={{ width: '100px', height: 'auto' }} />
+                    </td>
+                    <td>{item.product.productName}</td>
+                    <td>NPR {item.product.productPrice.toFixed(2)}</td>
+                    <td>
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) => handleUpdateQuantity(item.product._id, Number(e.target.value))}
+                        disabled={updating}
+                        style={{ width: '60px' }} // Make the quantity box smaller
+                      />
+                    </td>
+                    <td>NPR {itemTotal}</td> {/* Display item total */}
+                    <td>
+                      <button onClick={() => confirmAndDelete(item.product._id)} type="button" className="btn btn-danger">
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
               <tr>
-                <td colSpan="3"></td>
-                <td className="font-bold">Total:</td>
+                <td colSpan="4"></td>
+                <td className="font-bold">Grand Total:</td>
                 <td className="font-bold">NPR : {totalPrice}</td>
               </tr>
             </tbody>

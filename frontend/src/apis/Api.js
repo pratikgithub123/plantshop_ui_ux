@@ -73,3 +73,9 @@ export const deleteCartApi = (formData) => Api.delete(`/api/cart/delete`, { data
 // Clear Cart API
 export const clearCartApi = (userId) => Api.post('/api/cart/clear', { userId }, getConfig());
 
+// Update Cart API
+export const updateCartApi = (formData) => {
+    console.log("Update Payload:", formData);
+    console.log("Update Config:", getConfig());
+    return Api.put(`/api/cart/update`, formData, getConfig());
+};

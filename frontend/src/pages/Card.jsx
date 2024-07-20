@@ -46,7 +46,7 @@ const Card = ({ product }) => {
           <label>
             Catergory: <h7>{product.productCategory}</h7>
           </label>
-          <p className="product-price">Price: NPR {product.productPrice}</p>
+          
           <div>
             <label>Quantity:</label>
             <input
@@ -57,7 +57,7 @@ const Card = ({ product }) => {
             />
             <label>Piece</label>
           </div>
-          <p>Total Price: Rs {totalPrice}</p>
+          <p>Price: NPR {totalPrice}</p>
           <button onClick={handleAddToCart} className="add-to-cart-btn">
             Add to Cart
           </button>
