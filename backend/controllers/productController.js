@@ -41,7 +41,7 @@ const createProduct = async (req, res) => {
             productPrice: productPrice,
             productDescription: productDescription,
             productCategory: productCategory,
-            productfeatured: productFeatured,
+            productFeatured: productFeatured,
             productImageUrl: uploadedImage.secure_url,
             
         });
