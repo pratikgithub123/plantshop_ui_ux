@@ -1,7 +1,7 @@
 
 //import router from express
 const router = require('express').Router();
-const userController = require('../controllers/userControllers.js');
+const userController = require('../controllers/userController.js');
 //routes for the user
 router.post('/create',userController.createUser)
 

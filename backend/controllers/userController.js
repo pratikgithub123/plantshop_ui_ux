@@ -111,7 +111,7 @@ const resetPassword = async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        message: "Accont does not exist.",
+        message: "Account does not exist.",
       });
     }
 
@@ -119,7 +119,6 @@ const resetPassword = async (req, res) => {
       expiresIn: '5h',
     });
 
-    
     res.status(200).json({
       success: true,
       message: "Reset token generated successfully.",
@@ -135,63 +134,71 @@ const resetPassword = async (req, res) => {
   }
 };
 
-
 const getUsers = async (req, res) => {
-    try {
-      // Fetching all the users
-      const users = await Users.find({}, { password: 0 }); 
-  
-      res.status(200).json({
-        success: true,
-        message: "User data fetched successfully.",
-        users: users,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: "Server Error",
-        error: error,
-      });
-    }
-  };
-  
+  try {
+    // Fetching all the users
+    const users = await Users.find({}, { password: 0 }); 
 
+    res.status(200).json({
+      success: true,
+      message: "User data fetched successfully.",
+      users: users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error,
+    });
+  }
+};
+
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await Users.findById(req.params.id); // Corrected to use 'Users' model
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const deleteUser = async (req, res) => {
-    try {
-      const userId = req.params.id;
-  
-      
-      const deletedUser = await Users.findByIdAndDelete(userId);
-  
-      if (!deletedUser) {
-        return res.status(404).json({
-          success: false,
-          message: "User not found.",
-        });
-      }
-  
-      res.status(200).json({
-        success: true,
-        message: "User deleted successfully.",
-        deletedUser: deletedUser,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({
+  try {
+    const userId = req.params.id;
+
+    const deletedUser = await Users.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({
         success: false,
-        message: "Server Error",
-        error: error,
+        message: "User not found.",
       });
     }
-  };
-  
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully.",
+      deletedUser: deletedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error,
+    });
+  }
+};
 
 module.exports = {
   createUser,
   loginUser,
   resetPassword,
   getUsers,
+  getUserProfile,
   deleteUser,
 };
