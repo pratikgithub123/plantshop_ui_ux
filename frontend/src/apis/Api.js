@@ -29,7 +29,13 @@ export const loginApi = (data) => Api.post("/api/user/login", data);
 export const resetPasswordApi = (data) => Api.post("/api/user/reset-password", data);
 
 // Create Product API
-export const createProductApi = (formData) => Api.post('/api/product/create_product', formData);
+export const createProductApi = (formData) => {
+    return axios.post('http://localhost:5000/api/product/create_product', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
 
 // Get All Products API
 export const getAllProductsApi = () => Api.get('/api/product/get_products');
@@ -38,7 +44,14 @@ export const getAllProductsApi = () => Api.get('/api/product/get_products');
 export const getSingleProductApi = (id) => Api.get(`/api/product/get_product/${id}`);
 
 // Update Product API
-export const updateProductApi = (id, formData) => Api.put(`/api/product/update_product/${id}`, formData);
+export const updateProductApi = (id, formData) => {
+    return axios.put(`http://localhost:5000/api/product/update_product/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+
 
 // Delete Product API
 export const deleteProductApi = (id) => Api.delete(`/api/product/delete_product/${id}`);

@@ -168,7 +168,9 @@ const CartPage = () => {
           </div>
         </>
       ) : (
+        <div className="text-center">
         <p>No items in the cart.</p>
+      </div>
       )}
     </div>
   );

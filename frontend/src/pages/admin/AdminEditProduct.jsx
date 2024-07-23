@@ -14,7 +14,6 @@ const AdminEditProduct = () => {
     const [oldImage, setOldImage] = useState('');
     const [productImage, setProductImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
-    const [productFeatured, setProductFeatured] = useState(false);
 
     useEffect(() => {
         getSingleProductApi(id).then((res) => {
@@ -25,7 +24,6 @@ const AdminEditProduct = () => {
                 setProductDescription(product.productDescription);
                 setProductCategory(product.productCategory);
                 setOldImage(product.productImageUrl);
-                setProductFeatured(product.productFeatured);
             } else {
                 toast.error(res.data.message);
             }
@@ -43,7 +41,7 @@ const AdminEditProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         formData.append('productName', productName);
         formData.append('productPrice', productPrice);
@@ -52,8 +50,8 @@ const AdminEditProduct = () => {
         if (productImage) {
             formData.append('productImage', productImage);
         }
-        formData.append('productFeatured', productFeatured);
-
+        formData.append('oldImage', oldImage); // Include old image URL if not updating
+    
         updateProductApi(id, formData)
             .then((res) => {
                 if (res.data.success) {
@@ -68,7 +66,6 @@ const AdminEditProduct = () => {
                 toast.error('Internal Server Error!');
             });
     };
-
     return (
         <div className='m-3' style={{ overflowY: 'auto', maxHeight: '80vh' }}>
             <div className='d-flex gap-3'>
@@ -119,19 +116,11 @@ const AdminEditProduct = () => {
                     <input
                         onChange={handleImageUpload}
                         type='file'
-                        className='form-control'
-                    />
-
-                    <label>Is Featured</label>
-                    <input
-                        type='checkbox'
-                        checked={productFeatured}
-                        onChange={(e) => setProductFeatured(e.target.checked)}
-                        className='form-check-input mb-2'
+                        className='form-control mb-2'
                     />
 
                     <button type='submit' className='btn btn-primary w-100 mt-2'>
-                        Update product
+                        Update Product
                     </button>
                 </form>
 
@@ -145,7 +134,7 @@ const AdminEditProduct = () => {
                         alt='Old Product'
                     />
 
-                    <h6 className='mt-4'>New Image</h6>
+                    <h6 className='mt-4'>New Image Preview</h6>
                     {previewImage ? (
                         <img
                             src={previewImage}

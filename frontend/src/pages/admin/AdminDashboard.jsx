@@ -6,34 +6,33 @@ import { toast } from 'react-toastify';
 import { createProductApi, deleteProductApi, getAllProductsApi } from '../../apis/Api';
 
 const AdminDashboard = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    const [productName, setProductName] = useState('')
-    const [productPrice, setProductPrice] = useState('')
-    const [productDescription, setProductDescription] = useState('')
-    const [productCategory, setProductCategory] = useState('Indoor')
-    const [productFeatured, setProductFeatured] = useState(true);
-    const [productImage, setProductImage] = useState(null)
-    const [previewImage, setPreviewImage] = useState(null)
-    const [products, setProducts] = useState([])
+    const [productName, setProductName] = useState('');
+    const [productPrice, setProductPrice] = useState('');
+    const [productDescription, setProductDescription] = useState('');
+    const [productCategory, setProductCategory] = useState('Indoor');
+    const [productImage, setProductImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         getAllProductsApi().then((res) => {
-            setProducts(res.data.products)
-        })
-    }, [])
+            setProducts(res.data.products);
+        });
+    }, []);
 
     const handleImageUpload = (event) => {
-        const file = event.target.files[0]
-        setProductImage(file)
-        setPreviewImage(URL.createObjectURL(file))
-    }
+        const file = event.target.files[0];
+        setProductImage(file);
+        setPreviewImage(URL.createObjectURL(file));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         // Validation
-        if (!productName || !productPrice || !productDescription || !productCategory || !productImage || productFeatured == null) {
+        if (!productName || !productPrice || !productDescription || !productCategory || !productImage) {
             toast.error('Please fill all the fields');
             return;
         }
@@ -44,10 +43,9 @@ const AdminDashboard = () => {
         formData.append('productDescription', productDescription);
         formData.append('productCategory', productCategory);
         formData.append('productImage', productImage);
-        formData.append('productFeatured', productFeatured);
 
         createProductApi(formData).then((res) => {
-            if (res.data.success == false) {
+            if (res.data.success === false) {
                 toast.error(res.data.message);
             } else {
                 toast.success(res.data.message);
@@ -57,26 +55,26 @@ const AdminDashboard = () => {
             console.log(err);
             toast.error('Internal Server Error!');
         });
-    }
+    };
 
     const handleDelete = (id) => {
-        const confirm = window.confirm("Are you sure you want to delete this product?")
+        const confirm = window.confirm("Are you sure you want to delete this product?");
         if (!confirm) {
-            return
+            return;
         } else {
             deleteProductApi(id).then((res) => {
-                if (res.data.success == false) {
-                    toast.error(res.data.message)
+                if (res.data.success === false) {
+                    toast.error(res.data.message);
                 } else {
-                    toast.success(res.data.message)
-                    window.location.reload()
+                    toast.success(res.data.message);
+                    window.location.reload();
                 }
             }).catch((err) => {
-                console.log(err)
-                toast.error('Internal Server Error!')
-            })
+                console.log(err);
+                toast.error('Internal Server Error!');
+            });
         }
-    }
+    };
 
     return (
         <div className='m-4'>
@@ -120,12 +118,6 @@ const AdminDashboard = () => {
                             <input onChange={handleImageUpload} type="file" className='form-control' />
 
                             {previewImage && <img src={previewImage} className='img-fluid rounded object-cover mt-2' alt="preview" />}
-
-                            <label htmlFor="">Feature</label>
-                            <select onChange={(e) => setProductFeatured(e.target.value === 'true')} className='form-control mb-2'>
-                                <option value="true">true</option>
-                                <option value="false">false</option>
-                            </select>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -143,7 +135,6 @@ const AdminDashboard = () => {
                         <th>Product Price</th>
                         <th>Product Category</th>
                         <th>Product Description</th>
-                        <th>Featured</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -155,7 +146,6 @@ const AdminDashboard = () => {
                             <td>Rs.{item.productPrice}</td>
                             <td>{item.productCategory}</td>
                             <td>{item.productDescription.slice(0, 10)}....</td>
-                            <td>{item.productFeatured ? 'true' : 'false'}</td>
                             <td>
                                 <div className="btn-group" role="group" aria-label="Basic example">
                                     <Link to={`/admin/edit/${item._id}`} type="button" className="btn btn-success">Edit</Link>
@@ -167,7 +157,7 @@ const AdminDashboard = () => {
                 </tbody>
             </table>
         </div>
-    )
-}
+    );
+};
 
 export default AdminDashboard;
