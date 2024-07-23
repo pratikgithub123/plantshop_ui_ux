@@ -1,5 +1,5 @@
 .add-to-cart-btn {
-    background-color: black;
+    background-color: green;
     color: #fff;
     padding: 0.5rem;
     border: none;
@@ -8,7 +8,7 @@
   }
   
   .add-to-cart-btn:hover {
-    background-color: green;
+    background-color: black;
   }
   
   .quantity-container {

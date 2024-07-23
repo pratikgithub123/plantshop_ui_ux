@@ -20,7 +20,7 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboardUserDetails from './pages/admin/AdminDasboardUserDetails';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminDashboardCartDetails from './pages/admin/AdminDashboardCartDetails';
+import AdminDashboardOrderDetails from './pages/admin/AdminDashboardOrderDetails';
 import AdminEditProduct from './pages/admin/AdminEditProduct';
 import AdminRoutes from './protected_routes/AdminRoutes';
 import UserRoutes from './protected_routes/UserRoutes';
@@ -62,7 +62,7 @@ function App() {
         <Route element={<AdminRoutes />} >
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
           <Route path='/admin/dashboarduser' element={<AdminDashboardUserDetails />} />
-          <Route path='/admin/dashboardcart' element={<AdminDashboardCartDetails />} />
+          <Route path='/admin/dashboardorder' element={<AdminDashboardOrderDetails />} />
           <Route path='/admin/edit/:id' element={<AdminEditProduct />} />
         </Route>
 

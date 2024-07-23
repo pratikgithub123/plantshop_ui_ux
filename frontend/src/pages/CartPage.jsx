@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { clearCartApi, deleteCartApi, getAllCartsApi, updateCartApi } from '../apis/Api'; // Import updateCartApi
+import { checkoutApi, clearCartApi, deleteCartApi, getAllCartsApi, updateCartApi } from '../apis/Api';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false); // For update state
+  const [updating, setUpdating] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await getAllCartsApi(id);
-        console.log('API Response:', response);
         if (response.data.success) {
-          setCartItems(response.data.cart.items);
+          setCartItems(response.data.cart.items || []);
         } else {
           console.error('Error fetching cart:', response.data.message);
         }
@@ -31,14 +30,10 @@ const CartPage = () => {
 
   const handleDeleteCartApi = async (productId) => {
     try {
-      const formData = {
-        userId: id,
-        productId: productId
-      };
+      const formData = { userId: id, productId };
       const response = await deleteCartApi(formData);
-      console.log('Delete API Response:', response);
       if (response.data.success) {
-        setCartItems(cartItems.filter(item => item.product._id !== productId));
+        setCartItems(cartItems.filter(item => item.product?._id !== productId));
         toast.success("Item Deleted From Cart");
       } else {
         console.error('Error deleting cart item:', response.data.message);
@@ -54,12 +49,10 @@ const CartPage = () => {
     }
   };
 
-  // New function to handle clearing the cart
   const handleClearCartApi = async () => {
     if (window.confirm("Are you sure you want to clear the entire cart?")) {
       try {
         const response = await clearCartApi(id);
-        console.log('Clear Cart API Response:', response);
         if (response.data.success) {
           setCartItems([]);
           toast.success("All items removed from cart");
@@ -72,20 +65,16 @@ const CartPage = () => {
     }
   };
 
-  // New function to handle updating cart items
   const handleUpdateQuantity = async (productId, newQuantity) => {
+    if (newQuantity < 1) return; // Prevent updating to invalid quantity
+
     setUpdating(true);
     try {
-      const formData = {
-        userId: id,
-        productId: productId,
-        quantity: newQuantity
-      };
+      const formData = { userId: id, productId, quantity: newQuantity };
       const response = await updateCartApi(formData);
-      console.log('Update Cart API Response:', response);
       if (response.data.success) {
         setCartItems(cartItems.map(item =>
-          item.product._id === productId
+          item.product?._id === productId
             ? { ...item, quantity: newQuantity }
             : item
         ));
@@ -100,9 +89,27 @@ const CartPage = () => {
     }
   };
 
-  // Calculate total price for each item and overall total
+  const handleCheckout = async () => {
+    if (window.confirm("Are you sure you want to proceed to checkout?")) {
+      try {
+        const response = await checkoutApi(id);
+        if (response.success) {
+          setCartItems([]);
+          toast.success("Checkout successful!");
+        } else {
+          toast.error("Error during checkout: " + response.message);
+        }
+      } catch (error) {
+        console.error('Error during checkout:', error);
+        toast.error("Error during checkout. Please try again.");
+      }
+    }
+  };
+
   const totalPrice = cartItems.reduce((total, item) => {
-    return total + (item.product.productPrice * item.quantity);
+    const price = item.product?.productPrice || 0;
+    const quantity = item.quantity || 0;
+    return total + (price * quantity);
   }, 0).toFixed(2);
 
   return (
@@ -122,48 +129,42 @@ const CartPage = () => {
                 <th>Product Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Item Total</th> {/* New column for item total */}
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {cartItems.map((item) => {
-                const itemTotal = (item.product.productPrice * item.quantity).toFixed(2); // Calculate item total
-                return (
-                  <tr key={item.product._id}>
-                    <td>
-                      <img src={item.product.productImageUrl} alt={item.product.productName} className="product-image" style={{ width: '100px', height: 'auto' }} />
-                    </td>
-                    <td>{item.product.productName}</td>
-                    <td>NPR {item.product.productPrice.toFixed(2)}</td>
-                    <td>
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => handleUpdateQuantity(item.product._id, Number(e.target.value))}
-                        disabled={updating}
-                        style={{ width: '60px' }} // Make the quantity box smaller
-                      />
-                    </td>
-                    <td>NPR {itemTotal}</td> {/* Display item total */}
-                    <td>
-                      <button onClick={() => confirmAndDelete(item.product._id)} type="button" className="btn btn-danger">
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              {cartItems.map((item) => (
+                <tr key={item.product?._id}>
+                  <td>
+                    <img src={item.product?.productImageUrl} alt={item.product?.productName} className="product-image" style={{ width: '100px', height: 'auto' }} />
+                  </td>
+                  <td>{item.product?.productName || 'Unknown'}</td>
+                  <td>NPR {item.product?.productPrice?.toFixed(2) || '0.00'}</td>
+                  <td>
+                    <input
+                      type="number"
+                      min="1"
+                      value={item.quantity || 1}
+                      onChange={(e) => handleUpdateQuantity(item.product?._id, Number(e.target.value))}
+                      disabled={updating}
+                    />
+                  </td>
+                  <td>
+                    <button onClick={() => confirmAndDelete(item.product?._id)} type="button" className="btn btn-danger">
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
               <tr>
-                <td colSpan="4"></td>
-                <td className="font-bold">Grand Total:</td>
+                <td colSpan="3"></td>
+                <td className="font-bold">Total:</td>
                 <td className="font-bold">NPR : {totalPrice}</td>
               </tr>
             </tbody>
           </table>
           <div className="d-flex justify-content-end">
-            <button className="btn btn-primary mt-4">Proceed to Checkout</button>
+            <button onClick={handleCheckout} className="btn btn-primary mt-4">Proceed to Checkout</button>
           </div>
         </>
       ) : (

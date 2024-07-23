@@ -1,6 +1,7 @@
 const Cart = require('../model/cartModel');
 const Product = require("../model/productModel");
 const User = require("../model/userModel");
+const Order = require('../model/orderModel');
 
 const addToCart = async (req, res) => {
     const { userId, productId, quantity } = req.body;
@@ -223,6 +224,61 @@ const updateCartItem = async (req, res) => {
     }
 }
 
+const checkout = async (req, res) => {
+    const { userId } = req.body;
+  
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "UserId is required"
+      });
+    }
+  
+    try {
+      const cart = await Cart.findOne({ user: userId }).populate('items.product');
+  
+      if (!cart || cart.items.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Cart is empty"
+        });
+      }
+  
+      const orderItems = cart.items.map(item => ({
+        productId: item.product._id,
+        quantity: item.quantity
+      }));
+  
+      const order = new Order({
+        userId: userId,
+        items: orderItems,
+        totalPrice: cart.items.reduce((total, item) => {
+          const price = item.product?.productPrice || 0;
+          const quantity = item.quantity || 0;
+          return total + (price * quantity);
+        }, 0).toFixed(2)
+      });
+  
+      await order.save();
+  
+      cart.items = []; // Clear cart
+      await cart.save();
+  
+      res.status(200).json({
+        success: true,
+        message: "Order placed successfully",
+        order
+      });
+    } catch (error) {
+      console.error('Error during checkout:', error);
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error"
+      });
+    }
+  };
+
+
 module.exports = {
-    addToCart, getCart, deleteCartItem, clearCart, updateCartItem
+    addToCart, getCart, deleteCartItem, clearCart, updateCartItem, checkout
 }

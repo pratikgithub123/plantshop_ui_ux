@@ -57,7 +57,7 @@ const Card = ({ product }) => {
             />
             <label>Piece</label>
           </div>
-          <p>Price: NPR {totalPrice}</p>
+          <p>Total Price: Rs {totalPrice}</p>
           <button onClick={handleAddToCart} className="add-to-cart-btn">
             Add to Cart
           </button>

@@ -9,6 +9,8 @@ const Products = require('./model/productModel');
 const cartRoutes = require('./routes/cartRoutes');
 
 
+
+
 // Making express app
 const app = express();
 
@@ -45,7 +47,9 @@ app.use(express.json());
 app.use('/api/user', require('./routes/userRoutes'))
 
 // Routes for cart
-app.use('/api/cart', require('./routes/cartRoutes'));
+app.use('/api/cart', cartRoutes)
+
+
 
 
 

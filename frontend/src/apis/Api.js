@@ -67,6 +67,8 @@ export const addtoCartsApi = (formData) => {
     return Api.post(`/api/cart/add`, formData, getConfig());
 };
 
+
+
 // Delete Cart API
 export const deleteCartApi = (formData) => Api.delete(`/api/cart/delete`, { data: formData, ...getConfig() });
 
@@ -78,4 +80,15 @@ export const updateCartApi = (formData) => {
     console.log("Update Payload:", formData);
     console.log("Update Config:", getConfig());
     return Api.put(`/api/cart/update`, formData, getConfig());
+};
+
+export const checkoutApi = async (userId) => {
+    try {
+        console.log(`Posting to: /api/cart/checkout with userId: ${userId}`);
+        const response = await Api.post('/api/cart/checkout', { userId });
+        return response.data;
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        throw error;
+    }
 };

@@ -55,8 +55,8 @@ const AdminDashboardUserDetails = () => {
           <Link to="/admin/dashboard" className="productdetails">
                         Product Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
                     </Link>
-                    <Link to="/admin/dashboardcart" className="productdetails">
-                        Cart Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
+                    <Link to="/admin/dashboardorder" className="productdetails">
+                       Order Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
                     </Link>
         </div>
 

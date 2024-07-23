@@ -2,8 +2,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './components/ProductDetails.css';
 import { toast } from 'react-toastify';
+import './components/ProductDetails.css';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -85,8 +85,8 @@ const ProductDetails = () => {
               </div>
               <div className="product-info">
                 <h1>{product.productName}</h1>
-                <p>Description: {product.productDescription}</p>
-                <p>Price: NPR {product.productPrice} </p>
+                <p>Care Manual: {product.productDescription}</p>
+                
                 <div>
                   <label>Quantity:</label>
                   <input

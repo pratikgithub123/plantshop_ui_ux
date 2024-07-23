@@ -35,15 +35,15 @@ const createProduct = async (req, res) => {
             }
         );
 
-        
+
         const newProduct = new Products({
             productName: productName,
             productPrice: productPrice,
             productDescription: productDescription,
             productCategory: productCategory,
-            productFeatured: productFeatured,
+            productfeatured: productFeatured,
             productImageUrl: uploadedImage.secure_url,
-            
+
         });
         await newProduct.save();
         res.json({
@@ -92,22 +92,10 @@ const getSingleProduct = async (req, res) => {
 
 
 const updateProduct = async (req, res) => {
-   
-    console.log(req.body);
-    console.log(req.files);
+    const { productName, productPrice, productDescription, productCategory, productFeatured } = req.body;
+    const productImage = req.files ? req.files.productImage : null;
 
-
-    const {
-        productName,
-        productPrice,
-        productDescription,
-        productCategory,
-        productFeatured,
-    } = req.body;
-    const { productImage } = req.files;
-
-    
-    if (!productName || !productPrice || !productDescription || !productCategory || !productFeatured) {
+    if (!productName || !productPrice || !productDescription || !productCategory || productFeatured == null) {
         return res.json({
             success: false,
             message: 'Required fields are missing!',
@@ -115,56 +103,31 @@ const updateProduct = async (req, res) => {
     }
 
     try {
-        
+        const updatedData = {
+            productName,
+            productPrice,
+            productDescription,
+            productCategory,
+            productFeatured,
+        };
+
         if (productImage) {
-          
-            const uploadedImage = await cloudinary.v2.uploader.upload(
-                productImage.path,
-                {
-                    folder: 'products',
-                    crop: 'scale',
-                }
-            );
-
-            
-            const updatedData = {
-                productName: productName,
-                productPrice: productPrice,
-                productDescription: productDescription,
-                productCategory: productCategory,
-                productImageUrl: uploadedImage.secure_url,
-                productFeatured: productFeatured,
-            };
-
-            
-            const productId = req.params.id;
-            await Products.findByIdAndUpdate(productId, updatedData);
-            res.json({
-                success: true,
-                message: 'Product updated successfully with Image!',
-                updatedProduct: updatedData,
+            const uploadedImage = await cloudinary.uploader.upload(productImage.path, {
+                folder: 'products',
+                crop: 'scale',
             });
-        } else {
-            
-            const updatedData = {
-                productName: productName,
-                productPrice: productPrice,
-                productDescription: productDescription,
-                productCategory: productCategory,
-                productFeatured: productFeatured,
-
-            };
-
-            
-            const productId = req.params.id;
-            await Products.findByIdAndUpdate(productId, updatedData);
-            res.json({
-                success: true,
-                message: 'Product updated successfully without Image!',
-                updatedProduct: updatedData,
-            });
+            updatedData.productImageUrl = uploadedImage.secure_url;
         }
+
+        const productId = req.params.id;
+        const updatedProduct = await Products.findByIdAndUpdate(productId, updatedData, { new: true });
+        res.json({
+            success: true,
+            message: `Product updated successfully ${productImage ? 'with' : 'without'} Image!`,
+            updatedProduct,
+        });
     } catch (error) {
+        console.error(error);
         res.status(500).json({
             success: false,
             message: 'Internal server error',
@@ -245,5 +208,5 @@ module.exports = {
     deleteProduct,
     searchProducts,
     getFeaturedProducts,
-    
+
 };
