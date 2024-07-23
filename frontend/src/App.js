@@ -13,9 +13,10 @@ import { CartProvider } from './pages/CartContext';
 import CartPage from './pages/CartPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Orders from './pages/OrdersPage';
+import OrdersPage from './pages/OrdersPage';
 import ProductDetails from './pages/ProductsDetails';
 import ProductsPage from './pages/ProductsPage';
-import Profile from './pages/Profile';
 import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboardUserDetails from './pages/admin/AdminDasboardUserDetails';
@@ -51,11 +52,14 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/resetpassword' element={<ResetPassword />} />
+        <Route path='/orders' element={<Orders />} />
         
        
 
         <Route element={<UserRoutes/>}>
-        <Route path='/profile' element={<Profile/>} />
+        
+        <Route path="/orders/:userId" element={<OrdersPage />} />
+        
         </Route>
 
 

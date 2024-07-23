@@ -92,3 +92,12 @@ export const checkoutApi = async (userId) => {
         throw error;
     }
 };
+
+export const getCart = (userId) => {
+    return Api.get(`/api/cart/getcart/${userId}`)
+      .then(response => response.data)
+      .catch(error => {
+        console.error('Error fetching cart:', error);
+        throw error;
+      });
+  };

@@ -96,7 +96,7 @@ const ProductDetails = () => {
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
                   />
                 </div>
-                <p>Total Price: Rs {calculateTotalPriceWithIncrease(product.productPrice, quantity)}</p>
+                <p>Total Price: NPR {calculateTotalPriceWithIncrease(product.productPrice, quantity)}</p>
                 <button onClick={addToCart} className="add-to-cart-btn">
                   Add to Cart
                 </button>

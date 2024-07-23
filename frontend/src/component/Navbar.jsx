@@ -1,12 +1,13 @@
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import cart from '../assets/cart.png';
+import { getCart } from '../apis/Api'; // Function to fetch cart data
 import logo from '../assets/logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
+  const [uniqueProductCount, setUniqueProductCount] = useState(0);
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
@@ -14,6 +15,26 @@ const Navbar = () => {
     localStorage.clear();
     navigate('/login');
   };
+
+  useEffect(() => {
+    const fetchCartData = () => {
+      if (user) {
+        getCart(user._id)
+          .then(response => {
+            if (response.success) {
+              const uniqueProducts = response.cart.items.length;
+              setUniqueProductCount(uniqueProducts);
+            }
+          })
+          .catch(error => console.error('Error fetching cart:', error));
+      }
+    };
+
+    fetchCartData(); // Fetch initially
+    const interval = setInterval(fetchCartData, 10000); // Fetch every 10 seconds
+
+    return () => clearInterval(interval); // Clean up on component unmount
+  }, [user]);
 
   return (
     <div className='navbar'>
@@ -31,11 +52,10 @@ const Navbar = () => {
         {user ? (
           <>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link to="/orders">Orders</Link>
             </li>
             {user.isAdmin && (
               <li className="dropdown">
-                
                 <div className="dropdown-content">
                   <Link to="/admin/dashboard">Admin Dashboard</Link>
                 </div>
@@ -65,13 +85,14 @@ const Navbar = () => {
         )}
       </ul>
       {user && !user.isAdmin ? (
-        <Link to={`/cart/${user._id}`}>
-          <img src={cart} alt="cart" className='cart' />
+        <Link to={`/cart/${user._id}`} className='cart-container'>
+          <FontAwesomeIcon icon={faShoppingCart} className='cart' />
+          {uniqueProductCount > 0 && <span className='cart-quantity'>{uniqueProductCount}</span>}
         </Link>
       ) : (
         user ? null : (
-          <Link to="/login">
-            <img src={cart} alt="cart" className='cart' />
+          <Link to="/login" className='cart-container'>
+            <FontAwesomeIcon icon={faShoppingCart} className='cart' />
           </Link>
         )
       )}

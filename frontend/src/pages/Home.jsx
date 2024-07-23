@@ -45,7 +45,7 @@ const Home = () => {
                                     <img src={product.productImageUrl} className="card-img-top" alt={product.productName} />
                                     <div className="card-body">
                                         <h5 className="card-title">{product.productName}</h5>
-                                        <p className="card-text">{product.productDescription}</p>
+                                        
                                         <p className="card-text">Price: NPR {product.productPrice}</p>
                                         <button
                                             className="btn btn-primary"
@@ -54,7 +54,7 @@ const Home = () => {
                                                 handleAddToCart(product._id);
                                             }}
                                         >
-                                            Add to Cart
+                                            View More
                                         </button>
                                     </div>
                                 </div>
@@ -73,7 +73,7 @@ const Home = () => {
                                     <img src={product.productImageUrl} className="card-img-top" alt={product.productName} />
                                     <div className="card-body">
                                         <h5 className="card-title">{product.productName}</h5>
-                                        <p className="card-text">{product.productDescription}</p>
+                                      
                                         <p className="card-text">Price: NPR {product.productPrice}</p>
                                         <button
                                             className="btn btn-primary"
@@ -82,7 +82,7 @@ const Home = () => {
                                                 handleAddToCart(product._id);
                                             }}
                                         >
-                                            Add to Cart
+                                            View More
                                         </button>
                                     </div>
                                 </div>

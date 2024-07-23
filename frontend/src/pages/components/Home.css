@@ -16,6 +16,12 @@
 .card:hover {
   transform: scale(1.05);
 }
+.card img {
+  height: 200px; /* Adjust the height as needed */
+  object-fit: contain;
+}
+
+
 
 .card-img-top {
   height: 200px;
