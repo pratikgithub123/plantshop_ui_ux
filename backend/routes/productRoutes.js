@@ -20,7 +20,6 @@ router.delete('/delete_product/:id', productController.deleteProduct);
 // Search the products
 router.get('/search/:products', productController.searchProducts);
 
-//featured products
-router.get('/featured_products', productController.getFeaturedProducts);
+
 
 module.exports = router;

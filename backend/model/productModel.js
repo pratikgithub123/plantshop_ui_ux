@@ -29,10 +29,7 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    productFeatured: {
-        type: Boolean,
-        default: false,
-    },
+   
 });
 
 const Product = mongoose.model('Product', productSchema);
