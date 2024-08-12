@@ -13,8 +13,7 @@ import { CartProvider } from './pages/CartContext';
 import CartPage from './pages/CartPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Orders from './pages/OrdersPage';
-import OrdersPage from './pages/OrdersPage';
+import { default as Orders, default as OrdersPage } from './pages/OrdersPage';
 import ProductDetails from './pages/ProductsDetails';
 import ProductsPage from './pages/ProductsPage';
 import Register from './pages/Register';
@@ -58,7 +57,7 @@ function App() {
 
         <Route element={<UserRoutes/>}>
         
-        <Route path="/orders/:userId" element={<OrdersPage />} />
+        <Route path='/orders' element={<OrdersPage/>} />
         
         </Route>
 

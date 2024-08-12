@@ -68,6 +68,7 @@ const getCart = async (req, res) => {
         const cart = await Cart.findOne({ user: userId }).populate('items.product');
 
         if (!cart) {
+            console.log(`Cart not found for user ID: ${userId}`);
             return res.status(404).json({
                 success: false,
                 message: "Cart not found"
@@ -225,12 +226,12 @@ const updateCartItem = async (req, res) => {
 }
 
 const checkout = async (req, res) => {
-    const { userId } = req.body;
+    const { userId, phoneNumber, location } = req.body;
   
-    if (!userId) {
+    if (!userId || !phoneNumber || !location) {
       return res.status(400).json({
         success: false,
-        message: "UserId is required"
+        message: "UserId, phoneNumber, and location are required"
       });
     }
   
@@ -256,7 +257,9 @@ const checkout = async (req, res) => {
           const price = item.product?.productPrice || 0;
           const quantity = item.quantity || 0;
           return total + (price * quantity);
-        }, 0).toFixed(2)
+        }, 0).toFixed(2),
+        phoneNumber: phoneNumber, // Include phoneNumber
+        location: location // Include location
       });
   
       await order.save();
@@ -277,6 +280,7 @@ const checkout = async (req, res) => {
       });
     }
   };
+
 
 
 module.exports = {

@@ -6,6 +6,8 @@ const cloudinary = require('cloudinary').v2;
 const acceptMultimedia = require('connect-multiparty');
 const cartRoutes = require('./routes/cartRoutes');
 const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
 const WebSocket = require('ws');
 const http = require('http');
 
@@ -44,10 +46,27 @@ app.use(express.json());
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/cart', cartRoutes);
 app.use('/api/product', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 // WebSocket setup
 wss.on('connection', ws => {
-  // Handle WebSocket connections here
+  console.log('New client connected');
+  ws.on('message', message => {
+    console.log('Received:', message);
+    // Handle received messages here
+  });
+
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+
+  ws.send('Welcome to the WebSocket server');
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 // Start the server

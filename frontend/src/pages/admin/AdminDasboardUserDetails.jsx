@@ -6,24 +6,21 @@ import { toast } from 'react-toastify';
 import { deleteUserApi, getAllUsersApi } from '../../apis/Api';
 
 const AdminDashboardUserDetails = () => {
-
-
   // State for users
   const [users, setUsers] = useState([]);
 
- 
   useEffect(() => {
-   
-   // Fetch users
+    console.log('Fetching users...');
     getAllUsersApi()
-      .then((res) => setUsers(res.data.users))
+      .then((res) => {
+        console.log('Users fetched:', res);
+        setUsers(res.users);
+      })
       .catch((error) => {
         console.error('Error fetching users:', error);
         toast.error('Failed to fetch users. Please try again.');
       });
   }, []);
-
- 
 
   // Delete user function
   const handleDeleteUser = (id) => {
@@ -53,14 +50,12 @@ const AdminDashboardUserDetails = () => {
         <div className="d-flex justify-content-between">
           <h1>Admin Dashboard</h1>
           <Link to="/admin/dashboard" className="productdetails">
-                        Product Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
-                    </Link>
-                    <Link to="/admin/dashboardorder" className="productdetails">
-                       Order Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
-                    </Link>
+            Product Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
+          </Link>
+          <Link to="/admin/dashboardorder" className="productdetails">
+            Order Details <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '5px' }} />
+          </Link>
         </div>
-
-        
 
         {/* Users Table */}
         <div>
@@ -91,7 +86,6 @@ const AdminDashboardUserDetails = () => {
                     </button>
                   </td>
                 </tr>
-                
               ))}
             </tbody>
           </table>

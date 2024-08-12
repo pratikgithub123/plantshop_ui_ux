@@ -24,7 +24,7 @@ const Card = ({ product }) => {
       const response = await addtoCartsApi(formData);
       if (response.data.success) {
         toast.success('Item Added Successfully')
-        console.log(`Added ${product.productName} to the cart with ${quantity} kg`);
+        console.log(`Added ${product.productName} to the cart  ${quantity} piece`);
       } else {
         console.error('Error adding to cart:', response.data.message);
       }

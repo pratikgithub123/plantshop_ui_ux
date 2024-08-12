@@ -1,16 +1,18 @@
-// routes/orderRoutes.js
 const express = require('express');
-const { getOrder, updateOrder, deleteOrder } = require('../controllers/orderController');
-
 const router = express.Router();
+const orderController = require('../controllers/orderController');
 
-// Get order by ID
-router.get('/orders/:orderId', getOrder);
+// Route to create an order
+router.post('/create', orderController.createOrder);
 
-// Update order by ID
-router.put('/orders/:orderId', updateOrder);
+// Route to get orders by user ID
 
-// Delete order by ID
-router.delete('/orders/:orderId', deleteOrder);
+router.get('/user/:userId', orderController.getUserOrders);
+
+// Route to get all orders (for admin)
+router.get('/getallorders', orderController.getAllOrders);
+
+// Route to delete an order
+router.delete('/:orderId', orderController.deleteOrder);
 
 module.exports = router;

@@ -24,14 +24,21 @@ const Navbar = () => {
             if (response.success) {
               const uniqueProducts = response.cart.items.length;
               setUniqueProductCount(uniqueProducts);
+            } else {
+              setUniqueProductCount(0); // Ensure count is 0 if no cart is found
             }
           })
-          .catch(error => console.error('Error fetching cart:', error));
+          .catch(error => {
+            console.error('Error fetching cart:', error);
+            setUniqueProductCount(0); // Reset count on error
+          });
+      } else {
+        setUniqueProductCount(0); // Ensure count is 0 if no user is logged in
       }
     };
 
     fetchCartData(); // Fetch initially
-    const interval = setInterval(fetchCartData, 10000); // Fetch every 10 seconds
+    const interval = setInterval(fetchCartData, 100); // Fetch every 10 seconds
 
     return () => clearInterval(interval); // Clean up on component unmount
   }, [user]);
@@ -49,11 +56,13 @@ const Navbar = () => {
           <Link to="/products">Products</Link>
         </li>
         
+        {user && !user.isAdmin && ( // Render Orders link only if not an admin
+          <li>
+            <Link to="/orders">Orders</Link>
+          </li>
+        )}
         {user ? (
           <>
-            <li>
-              <Link to="/orders">Orders</Link>
-            </li>
             {user.isAdmin && (
               <li className="dropdown">
                 <div className="dropdown-content">

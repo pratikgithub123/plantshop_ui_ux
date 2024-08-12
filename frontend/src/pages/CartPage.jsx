@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { checkoutApi, clearCartApi, deleteCartApi, getAllCartsApi, updateCartApi } from '../apis/Api';
+import { clearCartApi, createOrderApi, deleteCartApi, getAllCartsApi, updateCartApi } from '../apis/Api';
+
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [location, setLocation] = useState('');
   const { id } = useParams();
 
   useEffect(() => {
@@ -89,21 +92,39 @@ const CartPage = () => {
     }
   };
 
-  const handleCheckout = async () => {
-    if (window.confirm("Are you sure you want to proceed to checkout?")) {
+  const handleCreateOrder = async () => {
+    if (!phoneNumber || !location) {
+      toast.error("Phone number and location are required");
+      return;
+    }
+
+    if (window.confirm("Are you sure you want to proceed to create an order?")) {
       try {
-        const response = await checkoutApi(id);
+        const response = await createOrderApi(id, phoneNumber, location);
         if (response.success) {
           setCartItems([]);
-          toast.success("Checkout successful!");
+          setPhoneNumber('');
+          setLocation('');
+          toast.success("Order created successfully!");
         } else {
-          toast.error("Error during checkout: " + response.message);
+          toast.error("Error creating order: " + response.message);
         }
       } catch (error) {
-        console.error('Error during checkout:', error);
-        toast.error("Error during checkout. Please try again.");
+        console.error('Error creating order:', error);
+        toast.error("Error creating order. Please try again.");
       }
     }
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    // Allow only numbers
+    const value = e.target.value.replace(/\D/g, '');
+    setPhoneNumber(value);
+  };
+
+  const handleLocationChange = (e) => {
+    // Convert input to uppercase
+    setLocation(e.target.value.toUpperCase());
   };
 
   const totalPrice = cartItems.reduce((total, item) => {
@@ -163,14 +184,34 @@ const CartPage = () => {
               </tr>
             </tbody>
           </table>
+          <div className="mb-3">
+            <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+            <input
+              type="text"
+              id="phoneNumber"
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+              className="form-control"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="location" className="form-label">Location</label>
+            <input
+              type="text"
+              id="location"
+              value={location}
+              onChange={handleLocationChange}
+              className="form-control"
+            />
+          </div>
           <div className="d-flex justify-content-end">
-            <button onClick={handleCheckout} className="btn btn-primary mt-4">Proceed to Checkout</button>
+            <button onClick={handleCreateOrder} className="btn btn-primary mt-4">Proceed to Create Order</button>
           </div>
         </>
       ) : (
         <div className="text-center">
-        <p>No items in the cart.</p>
-      </div>
+          <p>No items in the cart.</p>
+        </div>
       )}
     </div>
   );

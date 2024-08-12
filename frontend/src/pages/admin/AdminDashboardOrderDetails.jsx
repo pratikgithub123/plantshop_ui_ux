@@ -1,102 +1,93 @@
-// // src/pages/admin/AdminDashboardOrderPage.jsx
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { deleteOrderApi, getAllOrdersApi } from '../../apis/Api';
 
-// import React, { useEffect, useState } from 'react';
-// import { toast } from 'react-toastify';
-// import { getAllOrdersApi, deleteOrderApi, updateOrderApi } from '../../apis/Api';
+const AdminDashboardOrderPage = () => {
+    const [orders, setOrders] = useState([]);
 
-// const AdminDashboardOrderPage = () => {
-//     const [orders, setOrders] = useState([]);
-//     const [updating, setUpdating] = useState(false);
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await getAllOrdersApi();
+                if (response.success) {
+                    setOrders(response.orders);
+                } else {
+                    toast.error('Failed to fetch orders.');
+                }
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                toast.error('Failed to fetch orders.');
+            }
+        };
 
-//     useEffect(() => {
-//         const fetchOrders = async () => {
-//             try {
-//                 const response = await getAllOrdersApi();
-//                 if (response.data.success) {
-//                     setOrders(response.data.orders);
-//                 } else {
-//                     toast.error('Failed to fetch orders.');
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching orders:', error);
-//                 toast.error('Failed to fetch orders.');
-//             }
-//         };
+        fetchOrders();
+    }, []);
 
-//         fetchOrders();
-//     }, []);
+    const handleDeleteOrder = async (id) => {
+        const confirm = window.confirm('Are you sure you want to delete this order?');
+        if (!confirm) return;
 
-//     const handleDeleteOrder = async (id) => {
-//         const confirm = window.confirm('Are you sure you want to delete this order?');
-//         if (!confirm) return;
+        try {
+            const response = await deleteOrderApi(id);
+            if (response.success) {
+                setOrders(orders.filter(order => order._id !== id));
+                toast.success('Order deleted successfully.');
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            console.error('Error deleting order:', error);
+            toast.error('Failed to delete order.');
+        }
+    };
 
-//         try {
-//             const response = await deleteOrderApi(id);
-//             if (response.data.success) {
-//                 setOrders(orders.filter(order => order._id !== id));
-//                 toast.success('Order deleted successfully.');
-//             } else {
-//                 toast.error(response.data.message);
-//             }
-//         } catch (error) {
-//             console.error('Error deleting order:', error);
-//             toast.error('Failed to delete order.');
-//         }
-//     };
+    return (
+        <div className="m-5">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1>Order Management</h1>
+            </div>
 
-//     const handleUpdateOrder = async (id, status) => {
-//         const newStatus = prompt('Enter new status:', status);
-//         if (!newStatus) return;
+            <div>
+                <h2>All Orders</h2>
+                <table className="table table-striped">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Status</th>
+                            <th>User Full Name</th>
+                            <th>User Email</th>
+                            <th>User Location</th>
+                            <th>User Phone Number</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orders.map(order => (
+                            <tr key={order._id}>
+                                <td>{order._id}</td>
+                                <td>{order.status}</td>
+                                <td>{order.userId?.fullname}</td>
+                                <td>{order.userId?.email}</td>
+                                <td>{order.userId?.location}</td>
+                                <td>{order.userId?.phonenum}</td>
+                                <td>
+                                    <button
+                                        onClick={() => handleDeleteOrder(order._id)}
+                                        type="button"
+                                        className="btn btn-danger"
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
-//         setUpdating(true);
-//         try {
-//             const response = await updateOrderApi(id, { status: newStatus });
-//             if (response.data.success) {
-//                 setOrders(orders.map(order =>
-//                     order._id === id ? { ...order, status: newStatus } : order
-//                 ));
-//                 toast.success('Order updated successfully.');
-//             } else {
-//                 toast.error(response.data.message);
-//             }
-//         } catch (error) {
-//             console.error('Error updating order:', error);
-//             toast.error('Failed to update order.');
-//         } finally {
-//             setUpdating(false);
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <h1>Order Management</h1>
-//             <table>
-//                 <thead>
-//                     <tr>
-//                         <th>Order ID</th>
-//                         <th>Status</th>
-//                         <th>Actions</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {orders.map(order => (
-//                         <tr key={order._id}>
-//                             <td>{order._id}</td>
-//                             <td>{order.status}</td>
-//                             <td>
-//                                 <button onClick={() => handleUpdateOrder(order._id, order.status)} disabled={updating}>
-//                                     Update
-//                                 </button>
-//                                 <button onClick={() => handleDeleteOrder(order._id)} disabled={updating}>
-//                                     Delete
-//                                 </button>
-//                             </td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//         </div>
-//     );
-// };
-
-// export default AdminDashboardOrderPage;
+export default AdminDashboardOrderPage;
